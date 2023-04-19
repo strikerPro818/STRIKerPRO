@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Space Launch Tracking System</title>
+
+    <!-- CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        #video-container {
+            display: inline-block;
+            position: relative;
+            border: 3px solid #32CD32;
+            border-radius: 5px;
+        }
+
+        #video-feed {
+            width: 100%;
+            max-width: 640px;
+        }
+
+        #control-panel {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 0 10px;
+            background-color: #32CD32;
+            border: none;
+            color: #1a1a1a;
+            cursor: pointer;
+            outline: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #3cb371;
+        }
+
+        #data-display {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .data-info {
+            display: inline-block;
+            margin: 0 20px;
+        }
+    </style>
+
+    <!-- Socket.IO -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Space Launch Tracking System</h1>
+
+    <div id="video-container">
+        <img id="video-feed" src="{{ url_for('video_feed') }}" alt="Video feed">
+    </div>
+
+    <div id="control-panel">
+        <button id="left-btn">&larr;</button>
+        <button id="center-btn">Center</button>
+        <button id="right-btn">&rarr;</button>
+    </div>
+
+    <div id="data-display">
+        <div class="data-info">Temperature: <span id="temperature">0</span>°C</div>
+        <div class="data-info">Motor Angle: <span id="motor-angle">0</span>°</div>
+        <div class="data-info">Coordinates: (<span id="x">0</span>, <span id="y">0</span>)</div>
+        <div class="data-info">Dimensions: <span id="w">0</span> x <span id="h">0</span></div>
+    </div>
+
+    <script>
+        const socket = io();
+
+        socket.on('data_update', data => {
+            $('#temperature').text(data.temperature);
+            $('#motor-angle').text(data.motorAngle);
+            $('#x').text(data.x);
+            $('#y').text(data.y);
+            $('#w').text(data.w);
+            $('#h').text(data.h);
+        });
+
+        $('#video-container').on('click', event => {
+            const x = event.offsetX;
+            const y = event.offsetY;
+            socket.emit('click_event', { x, y });
+        });
+
+        $('#left-btn').on('click', () => {
+socket.emit('button_click', { direction: 'left' });
+});
+
+$('#center-btn').on('click', () => {
+socket.emit('button_click', { direction: 'bottom' });
+});
+
+$('#right-btn').on('click', () => {
+socket.emit('button_click', { direction: 'right' });
+});
+</script>
+
+</body>
+</html>
+```

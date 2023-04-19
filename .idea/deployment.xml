@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="striker@192.168.31.177:22 password (19)" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="pi@192.168.31.193:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_866" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.12.1:22 password (6)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_376" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.12.1:22 password (7)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_440" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.12.1:22 password (8)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_790" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.12.1:22 password (9)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_387" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (10)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_857" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (11)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_191" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (12)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_312" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (13)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_46" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (14)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_167" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (15)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_869" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (16)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_716" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (17)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_773" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (18)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_850" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (19)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_529" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (9)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_670" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>

@@ -1,0 +1,11 @@
+LICENSE.txt
+README.md
+pyproject.toml
+setup.cfg
+setup.py
+src/rmd_x8.egg-info/PKG-INFO
+src/rmd_x8.egg-info/SOURCES.txt
+src/rmd_x8.egg-info/dependency_links.txt
+src/rmd_x8.egg-info/entry_points.txt
+src/rmd_x8.egg-info/requires.txt
+src/rmd_x8.egg-info/top_level.txt
