@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="striker@192.168.31.177:22 password (19)" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="striker@192.168.31.238:22 password (7)" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
       <paths name="pi@192.168.31.193:22 password (2)">
         <serverdata>
           <mappings>
             <mapping deploy="/tmp/pycharm_project_866" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@192.168.31.193:22 password (3)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_594" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>
@@ -107,10 +114,122 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="striker@192.168.31.177:22 password (21)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_578" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (22)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_697" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (23)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_230" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (24)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_704" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (25)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_785" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (26)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_352" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (27)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_351" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="striker@192.168.31.177:22 password (9)">
         <serverdata>
           <mappings>
             <mapping deploy="/tmp/pycharm_project_670" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.238:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_144" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.238:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_842" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.238:22 password (3)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_579" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.238:22 password (4)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_540" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.238:22 password (5)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_884" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.238:22 password (6)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_693" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.238:22 password (7)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/striker/Downloads" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.239:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_309" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.239:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_36" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>

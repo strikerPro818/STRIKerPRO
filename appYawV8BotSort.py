@@ -38,6 +38,7 @@ pca_output = PCA9685(i2c_bus)
 pca_output.frequency = 100
 
 model = YOLO("/home/striker/.local/lib/python3.8/site-packages/yolov5/yolov8n.engine", task='detect')
+# model = YOLO('/home/striker/Downloads/yolov8n-pose.pt',task='detect')
 results = model.track(source=0, show=False, stream=True, tracker="botsort.yaml")
 # results = model.track(source=0, show=False, stream=True, tracker="bytetrack.yaml")
 
@@ -50,7 +51,7 @@ cam_size = 640
 FRAME_W = 1920
 FRAME_H = 1080
 cam_pan = 90
-angleVector = 2
+angleVector = 8.5
 desired_yaw_speed = 55
 prev_z_angle = None
 
@@ -222,7 +223,7 @@ def gen_frames():
                 for box, cls, obj_id in zip(boxes, classes, ids):
                     if cls == 0:  # "person" class index is 0
                         x1, y1, x2, y2 = map(int, box)
-                        print('x1:', x1, 'x2:', x2, 'y1:', y1, 'y2:', y2)
+                        # print('x1:', x1, 'x2:', x2, 'y1:', y1, 'y2:', y2)
                         w, h = x2 - x1, y2 - y1
                         center_x, center_y = x1 + w // 2, y1 + h // 2
                         track_id = int(obj_id.item())
@@ -245,7 +246,7 @@ def gen_frames():
                                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
                         # send_data_update(center_x, center_y, x1, y1, x2, y2,cam_pan - 90)
 
-        encoded_image = turboJPG.encode(img, quality=90, pixel_format=TJPF_BGR, flags=TJFLAG_FASTDCT)
+        encoded_image = turboJPG.encode(img, quality=80, pixel_format=TJPF_BGR, flags=TJFLAG_FASTDCT)
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + encoded_image + b'\r\n\r\n')
 
@@ -264,7 +265,7 @@ def on_connect():
 def handle_click_event(data):
     global highlighted_id, latest_result
     x, y = data['x'], data['y']
-    print('clicked x:',x,'clicked y:', y)
+    # print('clicked x:',x,'clicked y:', y)
 
     found_id = None
     if latest_result is not None:
