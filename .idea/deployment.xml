@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="striker@192.168.31.238:22 password (7)" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="striker@192.168.31.180:22 password" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
       <paths name="pi@192.168.31.193:22 password (2)">
         <serverdata>
@@ -13,6 +13,55 @@
         <serverdata>
           <mappings>
             <mapping deploy="/tmp/pycharm_project_594" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@172.20.10.3:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/striker/Downloads/JetsonBackup" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@172.20.10.3:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_559" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@172.20.10.3:22 password (3)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_843" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@172.20.10.9:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/striker/Downloads/JetsonBackup" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@172.20.10.9:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_691" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.1.6:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_593" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.1.6:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/striker/Downloads/JetsonBackup" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>
@@ -163,10 +212,73 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="striker@192.168.31.177:22 password (28)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_857" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (29)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/striker/Downloads" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (31)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/striker/Downloads" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (32)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_317" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (36)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_263" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (37)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp//home/striker/Downloads_61" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (38)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/striker/Downloads" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.177:22 password (39)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/striker/Downloads" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="striker@192.168.31.177:22 password (9)">
         <serverdata>
           <mappings>
             <mapping deploy="/tmp/pycharm_project_670" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.180:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/striker/Downloads/JetsonBackup" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>
@@ -216,6 +328,13 @@
         <serverdata>
           <mappings>
             <mapping deploy="/home/striker/Downloads" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.238:22 password (8)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_593" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>

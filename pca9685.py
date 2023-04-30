@@ -22,10 +22,10 @@ pca_output.frequency = 100
 #
 # time.sleep(4)
 
-pca_output.channels[0].duty_cycle = int(0/2 / 100 * 0xFFFF)
+pca_output.channels[0].duty_cycle = int(0 / 2 / 100 * 0xFFFF)
 pca_output.channels[1].duty_cycle = int(0 / 100 * 0xFFFF)
-# pca_output.channels[3].duty_cycle = int(50 / 100 * 0xFFFF)
-# pca_output.channels[3].duty_cycle = int(0 / 100 * 0xFFFF)
+# pca_output.channels[8].duty_cycle = int(0 / 100 * 0xFFFF)
+# pca_output.channels[9].duty_cycle = int(100 / 100 * 0xFFFF)
 # time.sleep(1)
 # pca_output.channels[3].duty_cycle = int(20 / 100 * 0xFFFF)
 
