@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocket Launch and Flight Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+            font-family: 'Orbitron', sans-serif;
+            color: #00ff00;
+        }
+
+        #dashboard-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto auto;
+            grid-gap: 16px;
+            width: 100%;
+            max-width: 1200px;
+            padding: 16px;
+        }
+
+
+        #video-container {
+
+
+            grid-column: 1 / -1;
+            grid-row: 1 / 2;
+            position: relative;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            /* overflow: hidden; Remove this line */
+            z-index: 1;
+            max-width: 100vw;
+            padding: 0;
+        }
+
+
+        #video {
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+
+        #data-container {
+            grid-column: 1 / 4;
+            grid-row: 2 / 3;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-gap: 16px;
+            font-size: 16px;
+        }
+
+        .data-box {
+            background-color: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .data-box h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            margin-bottom: 8px;
+        }
+
+        .data-box span {
+            font-size: 24px;
+            font-weight: 400;
+        }
+
+        #video-button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center; /* Optional, for centering button text */
+        }
+
+        #button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #shooter-btn, #feed-btn {
+            margin: 10px;
+        }
+
+
+        .control-btn {
+            font-size: 24px;
+            background-color: #00ff00;
+            border: none;
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 8px;
+            transition: background-color 0.2s;
+        }
+
+        .control-btn:hover {
+            background-color: #00cc00;
+        }
+
+        .control-btn.red {
+            background-color: #ff0000;
+        }
+
+
+        @media (max-width: 480px) {
+            #data-container {
+                grid-column: 1 / 2;
+                grid-row: 3 / 4;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-gap: 16px;
+                font-size: 16px;
+            }
+
+            .data-box h3 {
+                font-size: 16px;
+                margin-bottom: 4px;
+            }
+
+            .data-box span {
+                font-size: 20px;
+            }
+
+            #video-container {
+                padding: 16px;
+            }
+
+            #video-heading {
+                font-size: 24px;
+                font-weight: bold;
+                text-align: center;
+                margin-top: 20px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div id="dashboard-container">
+
+    <div id="video-button-container">
+        <div id="video-heading">AI Tracking System</div>
+        <div id="video-container">
+
+
+            <img id="video" src="{{ url_for('video_feed') }}" alt="Video feed">
+        </div>
+
+        <div id="button-container">
+            <button id="left-btn" class="control-btn">←</button>
+            <button id="bottom-btn" class="control-btn">▼</button>
+            <button id="right-btn" class="control-btn">→</button>
+        </div>
+        <div class="Fire-buttons">
+            <button id="shooter-btn" class="control-btn">S</button>
+            <button id="feed-btn" class="control-btn">F</button>
+            <button id="gyro-btn" class="control-btn">GyroTrack</button>
+        </div>
+    </div>
+
+
+    <!--    <div id="data-container">-->
+    <!--        <div class="data-box">-->
+    <!--            <h3>Temperature</h3>-->
+    <!--            <span id="temp">25.0°C</span>-->
+    <!--        </div>-->
+    <!--        <div class="data-box">-->
+    <!--            <h3>Motor Angle</h3>-->
+    <!--            <span id="angle">180.0°</span>-->
+    <!--        </div>-->
+    <!--        <div class="data-box">-->
+    <!--            <h3>X</h3>-->
+    <!--            <span id="x-value">0</span>-->
+    <!--        </div>-->
+    <!--        <div class="data-box">-->
+    <!--            <h3>Y</h3>-->
+    <!--            <span id="y-value">0</span>-->
+    <!--        </div>-->
+    <!--        <div class="data-box">-->
+    <!--            <h3>Width</h3>-->
+    <!--            <span id="w-value">0</span>-->
+    <!--        </div>-->
+    <!--        <div class="data-box">-->
+    <!--            <h3>Height</h3>-->
+    <!--            <span id="h-value">0</span>-->
+    <!--        </div>-->
+
+
+    <!--    </div>-->
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+
+<!--<script src="/templates/socket.io.min.static"></script>-->
+<!--<script src="static/socket.io.min.js"></script>-->
+
+
+<script>
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const socket = io();
+        const video = document.getElementById('video');
+        const temp = document.getElementById('temp');
+        const angle = document.getElementById('angle');
+
+        const leftBtn = document.getElementById('left-btn');
+        const rightBtn = document.getElementById('right-btn');
+        const bottomBtn = document.getElementById('bottom-btn');
+        const shooterBtn = document.getElementById('shooter-btn');
+        const feedBtn = document.getElementById('feed-btn');
+        const gyroBtn = document.getElementById('gyro-btn');
+
+
+        const xValue = document.getElementById('x-value');
+        const yValue = document.getElementById('y-value');
+        const wValue = document.getElementById('w-value');
+        const hValue = document.getElementById('h-value');
+
+      video.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    const videoRect = video.getBoundingClientRect();
+    const containerRect = video.parentElement.getBoundingClientRect();
+    const videoWidth = video.videoWidth || video.clientWidth;
+    const videoHeight = video.videoHeight || video.clientHeight;
+    const videoAspectRatio = videoWidth / videoHeight;
+    const containerWidth = containerRect.width;
+    const containerHeight = containerRect.height;
+    const containerAspectRatio = containerWidth / containerHeight;
+    let x = 0;
+    let y = 0;
+
+    // calculate the actual video size based on the video frame size and the displayed video size
+    const frameWidth = 1920;
+    const frameHeight = 1080;
+    const scaleX = videoWidth / frameWidth;
+    const scaleY = videoHeight / frameHeight;
+    const scaledWidth = frameWidth * scaleX;
+    const scaledHeight = frameHeight * scaleY;
+
+    if (videoAspectRatio > containerAspectRatio) {
+        const scale = containerWidth / scaledWidth;
+        const offsetY = (containerHeight - scaledHeight) / 2;
+        x = (event.clientX - videoRect.left) / scale / scaleX;
+        y = (event.clientY - videoRect.top - offsetY) / scale / scaleY;
+    } else {
+        const scale = containerHeight / scaledHeight;
+        const offsetX = (containerWidth - scaledWidth) / 2;
+        x = (event.clientX - videoRect.left - offsetX) / scale / scaleX;
+        y = (event.clientY - videoRect.top) / scale / scaleY;
+    }
+
+    const x1 = 0;
+    const y1 = 0;
+    const x2 = frameWidth;
+    const y2 = frameHeight;
+
+    if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
+        console.log('Clicked within the bounding box!');
+        console.log('X: ' + x + ', Y: ' + y);
+        socket.emit('click_event', { x, y });
+    } else {
+        console.log('Clicked outside the bounding box!');
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // video.addEventListener('click', (event) => {
+        //     event.preventDefault();
+        //     const rect = video.getBoundingClientRect();
+        //     const containerRect = video.parentElement.getBoundingClientRect();
+        //     let x, y;
+        //
+        //     const videoWidth = video.videoWidth || video.clientWidth;
+        //     const videoHeight = video.videoHeight || video.clientHeight;
+        //     let scale;
+        //
+        //     if (window.orientation === undefined) {
+        //         // Device is not mobile or does not support orientation detection
+        //         console.log('Device is not mobile or does not support orientation detection');
+        //         scale = Math.min(containerRect.width / videoWidth, containerRect.height / videoHeight);
+        //         x = (event.clientX - rect.left - (videoWidth * scale - containerRect.width) / 2) / scale;
+        //         y = (event.clientY - rect.top - (videoHeight * scale - containerRect.height) / 2) / scale;
+        //     } else if (window.orientation === 0 || window.orientation === 180) {
+        //         // Device is in portrait orientation
+        //         console.log('Device is in portrait orientation');
+        //         console.log('ClientX: ' + event.clientX);
+        //         console.log('ClientY: ' + event.clientY);
+        //         console.log('Rect.Left: ' + rect.left);
+        //         console.log('Rect.Top: ' + rect.top);
+        //         console.log('Container Width: ' + containerRect.width);
+        //         console.log('Container Height: ' + containerRect.height);
+        //         scale = containerRect.height / videoWidth;
+        //         console.log('Scale: ' + scale);
+        //         x = (event.clientX - rect.left - ((containerRect.width / scale - videoWidth) / 2)) / scale;
+        //         y = (event.clientY - rect.top - ((containerRect.height / scale - videoHeight) / 2)) / scale;
+        //     } else {
+        //         // Device is in landscape orientation
+        //         console.log('Device is in landscape orientation');
+        //         scale = containerRect.width / videoWidth;
+        //         x = (event.clientX - rect.left - ((containerRect.width / scale - videoWidth) / 2)) / scale;
+        //         y = (event.clientY - rect.top - ((containerRect.height / scale - videoHeight) / 2)) / scale;
+        //     }
+        //
+        //     console.log('X: ' + x + ', Y: ' + y);
+        //
+        //     socket.emit('click_event', {x: x, y: y});
+        // });
+
+
+        leftBtn.addEventListener('click', () => {
+            socket.emit('button_click', {direction: 'left'});
+        });
+
+        rightBtn.addEventListener('click', () => {
+            socket.emit('button_click', {direction: 'right'});
+        });
+
+        bottomBtn.addEventListener('click', () => {
+            socket.emit('button_click', {direction: 'bottom'});
+        });
+
+        shooterBtn.addEventListener('click', () => {
+            shooterBtn.classList.toggle('red'); // toggle red class
+            const direction = 'shooter';
+            socket.emit('button_click', {direction: direction});
+        });
+
+        feedBtn.addEventListener('click', () => {
+            feedBtn.classList.toggle('red'); // toggle red class
+            const direction = 'feeder';
+            socket.emit('button_click', {direction: direction});
+        });
+        console.log("Attaching event listener for gyroBtn click");
+        gyroBtn.addEventListener('click', () => {
+            gyroBtn.classList.toggle('red');
+            const direction = 'gyroTrack';
+            socket.emit('button_click', {direction: direction});
+        });
+
+
+        // Add event listener for canvas click/touch events
+        function handleMouseEvent(event) {
+            const x = event.clientX || (event.touches && event.touches[0].clientX);
+            const y = event.clientY || (event.touches && event.touches[0].clientY);
+            if (x && y) {
+                socket.emit('click_event', {x: x, y: y});
+            }
+        }
+
+        // canvas.addEventListener('click', handleMouseEvent);
+        // canvas.addEventListener('touchstart', handleMouseEvent);
+
+        socket.on('data_update', (data) => {
+            temp.textContent = data.temperature.toFixed(1) + '°C';
+            angle.textContent = data.motorAngle.toFixed(1) + '°';
+
+            // Add the following lines
+            xValue.textContent = data.x.toFixed(1);
+            yValue.textContent = data.y.toFixed(1);
+            wValue.textContent = data.w.toFixed(1);
+            hValue.textContent = data.h.toFixed(1);
+        });
+
+        window.addEventListener('deviceorientation', function (event) {
+            let gyroDataDict = {
+                'x': event.beta.toFixed(2),
+                'y': event.gamma.toFixed(2),
+                'z': event.alpha.toFixed(2)  // Add the 'z' key to the JSON data
+            }
+
+            console.log(gyroDataDict);  // Add this line to print the gyroDataDict object to the console
+
+            $.ajax({
+                type: "POST",
+                url: "/gyro_data",
+                data: JSON.stringify(gyroDataDict),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            });
+        });
+
+
+    });
+
+</script>
+</body>
+</html>
+

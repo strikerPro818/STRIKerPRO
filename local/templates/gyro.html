@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mobile Gyro Controller</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+</head>
+<body>
+
+	<h1>Mobile Gyro Controller</h1>
+
+	<button id="gyroBtn">Track Gyro</button>
+
+	<script>
+		var socket = io.connect('http://192.168.31.177:9090');
+
+		document.getElementById('gyroBtn').addEventListener('click', function() {
+			socket.emit('button_click', { direction: 'gyroTrack' });
+		});
+	</script>
+
+</body>
+</html>
