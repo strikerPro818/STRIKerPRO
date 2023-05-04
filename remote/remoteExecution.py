@@ -1,13 +1,14 @@
 from src.rmd_x8 import RMD_X8
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO
+from adafruit_pca9685 import PCA9685
 
 robot = RMD_X8(0x141)
 robot.setup()
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-desired_yaw_speed = 80
+desired_yaw_speed = 1000
 
 
 
