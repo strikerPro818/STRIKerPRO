@@ -10,6 +10,7 @@ FRAME_W = 1920
 FRAME_H = 1080
 angleVector = 3
 cam_pan = 90
+shooter_on, feeder_on, gyroTrack_on = False, False, False
 
 model = YOLO('/Users/epc_striker_pro/Downloads/yolov8n-pose.mlmodel',task='pose')
 results = model.track(source=0, show=False, stream=True, tracker="botsort.yaml")
@@ -95,6 +96,50 @@ def panAngle(angle):
         print("Angle sent successfully")
     else:
         print("Error sending angle:", response.status_code)
+def startShooter(speed):
+    url = 'http://192.168.31.180:9090/shooter/start'
+    payload = {'speed': speed}
+    headers = {'Content-Type': 'application/json'}
+
+    response = requests.post(url, json=payload, headers=headers)
+
+    if response.status_code == 200:
+        print("Shooter started successfully")
+    else:
+        print("Error starting shooter:", response.status_code)
+
+def stopShooter():
+    url = 'http://192.168.31.180:9090/shooter/stop'
+
+    response = requests.post(url)
+
+    if response.status_code == 200:
+        print("Shooter stopped successfully")
+    else:
+        print("Error stopping shooter:", response.status_code)
+
+def startFeeder(speed):
+    url = 'http://192.168.31.180:9090/feeder/start'
+    payload = {'speed': speed}
+    headers = {'Content-Type': 'application/json'}
+
+    response = requests.post(url, json=payload, headers=headers)
+
+    if response.status_code == 200:
+        print("Feeder started successfully")
+    else:
+        print("Error starting feeder:", response.status_code)
+
+def stopFeeder():
+    url = 'http://192.168.31.180:9090/feeder/stop'
+
+    response = requests.post(url)
+
+    if response.status_code == 200:
+        print("Feeder stopped successfully")
+    else:
+        print("Error stopping feeder:", response.status_code)
+
 def autoTrack(x1, x2):
     global cam_pan, FRAME_W, angleVector
 
@@ -227,17 +272,17 @@ def handle_button_click(data):
         panAngle(int(cam_pan - 90))
     elif data.get('direction') == 'shooter':
         if shooter_on:
-            # stopShooter()
+            stopShooter()
             shooter_on = False
         else:
-            # startShooter(42)
+            startShooter(42)
             shooter_on = True
     elif data.get('direction') == 'feeder':
         if feeder_on:
-            # stopFeeder()
+            stopFeeder()
             feeder_on = False
         else:
-            # startFeeder(100)
+            startFeeder(100)
             feeder_on = True
 
 
