@@ -8,11 +8,11 @@ from threading import Thread
 import numpy as np
 FRAME_W = 1920
 FRAME_H = 1080
-angleVector = 3
+angleVector = 2
 cam_pan = 90
 shooter_on, feeder_on, gyroTrack_on = False, False, False
 
-model = YOLO('/Users/epc_striker_pro/Downloads/yolov8n-pose.mlmodel',task='pose')
+model = YOLO('yolov8n-pose.mlmodel',task='pose')
 results = model.track(source=0, show=False, stream=True, tracker="botsort.yaml")
 app = Flask(__name__)
 
@@ -97,48 +97,57 @@ def panAngle(angle):
     else:
         print("Error sending angle:", response.status_code)
 def startShooter(speed):
-    url = 'http://192.168.31.180:9090/shooter/start'
-    payload = {'speed': speed}
-    headers = {'Content-Type': 'application/json'}
+    def start_shooter_thread():
+        url = 'http://192.168.31.180:9090/shooter/start'
+        payload = {'speed': speed}
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url, json=payload, headers=headers)
+        if response.status_code == 200:
+            print("Shooter started successfully")
+        else:
+            print("Error starting shooter:", response.status_code)
 
-    response = requests.post(url, json=payload, headers=headers)
-
-    if response.status_code == 200:
-        print("Shooter started successfully")
-    else:
-        print("Error starting shooter:", response.status_code)
+    t = Thread(target=start_shooter_thread)
+    t.start()
 
 def stopShooter():
-    url = 'http://192.168.31.180:9090/shooter/stop'
+    def stop_shooter_thread():
+        url = 'http://192.168.31.180:9090/shooter/stop'
+        response = requests.post(url)
+        if response.status_code == 200:
+            print("Shooter stopped successfully")
+        else:
+            print("Error stopping shooter:", response.status_code)
 
-    response = requests.post(url)
-
-    if response.status_code == 200:
-        print("Shooter stopped successfully")
-    else:
-        print("Error stopping shooter:", response.status_code)
+    t = Thread(target=stop_shooter_thread)
+    t.start()
 
 def startFeeder(speed):
-    url = 'http://192.168.31.180:9090/feeder/start'
-    payload = {'speed': speed}
-    headers = {'Content-Type': 'application/json'}
+    def start_feeder_thread():
+        url = 'http://192.168.31.180:9090/feeder/start'
+        payload = {'speed': speed}
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url, json=payload, headers=headers)
+        if response.status_code == 200:
+            print("Feeder started successfully")
+        else:
+            print("Error starting feeder:", response.status_code)
 
-    response = requests.post(url, json=payload, headers=headers)
-
-    if response.status_code == 200:
-        print("Feeder started successfully")
-    else:
-        print("Error starting feeder:", response.status_code)
+    t = Thread(target=start_feeder_thread)
+    t.start()
 
 def stopFeeder():
-    url = 'http://192.168.31.180:9090/feeder/stop'
+    def stop_feeder_thread():
+        url = 'http://192.168.31.180:9090/feeder/stop'
+        response = requests.post(url)
+        if response.status_code == 200:
+            print("Feeder stopped successfully")
+        else:
+            print("Error stopping feeder:", response.status_code)
 
-    response = requests.post(url)
+    t = Thread(target=stop_feeder_thread)
+    t.start()
 
-    if response.status_code == 200:
-        print("Feeder stopped successfully")
-    else:
-        print("Error stopping feeder:", response.status_code)
 
 def autoTrack(x1, x2):
     global cam_pan, FRAME_W, angleVector
@@ -204,7 +213,7 @@ def gen_frames():
                         text = f'Selected ID: {int(track_id)}'
                         auto_track_thread = Thread(target=autoTrack_thread, args=(x1, x2))
                         auto_track_thread.start()
-                        detect_ready_position(result)
+                        # detect_ready_position(result)
                         # cam_pan = autoTrack(x1, x2)
                         # detect_arm_raise(result)
                         # detect_ready_position(result)

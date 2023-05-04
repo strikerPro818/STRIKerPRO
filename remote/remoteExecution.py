@@ -10,7 +10,7 @@ robot.setup()
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-desired_yaw_speed = 1000
+desired_yaw_speed = 100
 
 i2c_bus = busio.I2C(SCL, SDA)
 
