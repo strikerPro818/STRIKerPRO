@@ -8,12 +8,14 @@ from threading import Thread
 import numpy as np
 FRAME_W = 1920
 FRAME_H = 1080
-angleVector = 2
+angleVector = 4.5
 cam_pan = 90
 shooter_on, feeder_on, gyroTrack_on = False, False, False
+prev_z_angle = None
 
 model = YOLO('yolov8n-pose.mlmodel',task='pose')
 results = model.track(source=0, show=False, stream=True, tracker="botsort.yaml")
+# results =[1,2,3,4]
 app = Flask(__name__)
 
 highlighted_id = None
@@ -79,23 +81,29 @@ def detect_ready_position(result):
             # The player is in the ready position
             print('Player ready')
             # pca_output.channels[1].duty_cycle = int(100 / 100 * 0xFFFF)
+            startFeeder(100)
 
             # Perform additional actions here
         else:
             # The player is not in the ready position
             print('Player not ready')
+            stopFeeder()
             # pca_output.channels[1].duty_cycle = int(0 / 100 * 0xFFFF)
 def panAngle(angle):
-    url = 'http://192.168.31.180:9090/tracking_data'
-    payload = {'z': angle}
-    headers = {'Content-Type': 'application/json'}
+    def start_panAngle_thread():
+        url = 'http://192.168.31.180:9090/tracking_data'
+        payload = {'z': angle}
+        headers = {'Content-Type': 'application/json'}
 
-    response = requests.post(url, json=payload, headers=headers)
+        response = requests.post(url, json=payload, headers=headers)
 
-    if response.status_code == 200:
-        print("Angle sent successfully")
-    else:
-        print("Error sending angle:", response.status_code)
+        if response.status_code == 200:
+            print("Angle sent successfully")
+        else:
+            print("Error sending angle:", response.status_code)
+
+    t = Thread(target=start_panAngle_thread)
+    t.start()
 def startShooter(speed):
     def start_shooter_thread():
         url = 'http://192.168.31.180:9090/shooter/start'
@@ -194,8 +202,8 @@ def gen_frames():
         # print(img)
         if result.boxes is not None:
 
-            # if gyroTrack_on:
-            #     gyroTrack(z_angle, True)
+            if gyroTrack_on:
+                gyroTrack(z_angle, True)
 
             boxes = result.boxes.xyxy.to("cpu").numpy()
 
@@ -261,6 +269,32 @@ def handle_click_event(data):
 
     # Pass highlighted_id argument to gen_frames function
     socketio.emit('frame_update', {'data': 'update frame', 'highlighted_id': highlighted_id})
+# @app.route('/gyro_data', methods=['POST'])
+# def handle_gyro_data():
+#     global z_angle, gyroTrack_on
+#
+#     if request.method == 'POST':
+#         gyro_data = request.get_json()
+#         z_angle = gyro_data.get('z')
+#         return '', 200
+#     else:
+#         gyroTrack_on = False
+#         return '', 405
+def process_gyro_data(gyro_data):
+    global z_angle, gyroTrack_on
+    z_angle = gyro_data.get('z')
+@app.route('/gyro_data', methods=['POST'])
+def handle_gyro_data():
+    if request.method == 'POST':
+        gyro_data = request.get_json()
+        thread = Thread(target=process_gyro_data, args=(gyro_data,))
+        thread.start()
+        return '', 200
+    else:
+        global gyroTrack_on
+        gyroTrack_on = False
+        return '', 405
+
 @socketio.on('button_click')
 def handle_button_click(data):
     global cam_pan, shooter, feeder, shooter_on, feeder_on, gyroTrack_on, z_rotation_angle
@@ -280,11 +314,14 @@ def handle_button_click(data):
         cam_pan = max(0, min(180, cam_pan))  # Ensure the angle is within the valid range
         panAngle(int(cam_pan - 90))
     elif data.get('direction') == 'shooter':
+        speed = data.get('speed', 30)  # Get the speed value from the data dictionary (default to 50 if not present)
         if shooter_on:
             stopShooter()
             shooter_on = False
         else:
-            startShooter(42)
+            print(speed)
+            startShooter(int(speed))
+
             shooter_on = True
     elif data.get('direction') == 'feeder':
         if feeder_on:
@@ -297,18 +334,28 @@ def handle_button_click(data):
 
     # elif data.get('direction') == 'gyroTrack':
     #     if gyroTrack_on:
-    #         print('disable gyro',z_angle)
+    #         print('disable gyro', z_angle)
     #         panAngle(0)
     #         gyroTrack_on = False
     #     else:
-    #         print('turn gyro',z_angle)
+    #         print('turn gyro', z_angle)
     #         rollingFactor = 0.6
     #         panAngle(z_angle*rollingFactor)
     #         gyroTrack_on = True
 
     elif data.get('direction') == 'gyroTrack':
         gyroTrack_on = not gyroTrack_on  # Toggle the gyroTrack_on value
-        # gyroTrack(z_rotation_angle, gyroTrack_on)
+        gyroTrack(z_rotation_angle, gyroTrack_on)
+def gyroTrack(z_rotation_angle, gyroTrack_on):
+    global cam_pan, angleVector, prev_z_angle
+
+    angle_change = 1  # Adjust this value to control the sensitivity of the angle change per degree of rotation
+    angle_threshold = 1.0  # Only update the angle if the absolute change is greater than this threshold
+    if z_rotation_angle == 0:
+        panAngle(0)
+    elif gyroTrack_on and (prev_z_angle is None or abs(z_rotation_angle - prev_z_angle) > angle_threshold):
+        panAngle(z_rotation_angle)
+
 @app.route('/video_feed')
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')

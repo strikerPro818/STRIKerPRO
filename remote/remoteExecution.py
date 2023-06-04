@@ -1,12 +1,18 @@
-from src.rmd_x8 import RMD_X8
+# from src.rmd_x8 import RMD_X8
+from remote.STEP57 import STEP57
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO
 from adafruit_pca9685 import PCA9685
 import busio
 from board import SCL, SDA
 
-robot = RMD_X8(0x141)
+# robot = RMD_X8(0x141)
+robot = STEP57(0x0100)
+
 robot.setup()
+robot.step_write_pid(20000, 76000, 1)
+robot.step_on()
+gear_ratio = 10.5
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -34,15 +40,17 @@ def handle_tracking_data():
     else:
         return jsonify({'status': 'method not allowed'}), 405
 
+# def panAngle(angle):
+#     global desired_yaw_speed
+#     target = int(angle * 100)
+#     angle_bytes = target.to_bytes(4, 'little', signed=True)
+#     speed_bytes = desired_yaw_speed.to_bytes(2, 'little', signed=True)
+#     data = list(speed_bytes) + list(angle_bytes)
+#     print("Executed Angle:", angle)
+#     robot.position_closed_loop_2(data)
 def panAngle(angle):
-    global desired_yaw_speed
-    target = int(angle * 100)
-    angle_bytes = target.to_bytes(4, 'little', signed=True)
-    speed_bytes = desired_yaw_speed.to_bytes(2, 'little', signed=True)
-    data = list(speed_bytes) + list(angle_bytes)
-    print("Executed Angle:", angle)
-    robot.position_closed_loop_2(data)
-
+    global gear_ratio
+    robot.step_position(angle * gear_ratio, 4000)
 
 @app.route('/shooter/start', methods=['POST'])
 def handle_shooter_start():
@@ -101,5 +109,5 @@ def stopFeeder():
     pca_output.channels[1].duty_cycle = int(0 / 100 * 0xFFFF)
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=9090, allow_unsafe_werkzeug=True)
+    socketio.run(app, host='192.168.31.180', port=9090, allow_unsafe_werkzeug=True)
 

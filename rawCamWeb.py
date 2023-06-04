@@ -7,13 +7,14 @@ app = Flask(__name__)
 # model = YOLO("/home/striker/Downloads/yolov8n-pose.engine", task='pose')
 # model = YOLO("/home/striker/.local/lib/python3.8/site-packages/yolov5/yolov8n.engine")
 # model = YOLO('/home/striker/Downloads/JetsonBackup/yolov8n-pose.engine', task='pose')  # load an official model
-model = YOLO('/home/striker/yolov8n-pose.engine', task='pose')  # load an official model
+# model = YOLO('/home/striker/yolov8n-pose.engine', task='pose')  # load an official model
 
 
 
 
 
 # model = YOLO("/home/striker/.local/lib/python3.8/site-packages/yolov5/yolov5s.engine",task='detect')
+model = YOLO('./local/yolov8n-pose.mlmodel',task='pose')
 
 
 results = model.track(source=0, show=False, stream=True, tracker="botsort.yaml")
@@ -71,5 +72,5 @@ def index():
 
 if __name__ == '__main__':
     # app.run( host='192.168.31.177', debug=False)
-    app.run( host='0.0.0.0', debug=False)
+    app.run( host='0.0.0.0',port=9091, debug=False)
 
