@@ -6,7 +6,7 @@ import os
 import time
 
 
-class STEP57:
+class STEP57YAW:
     """
     A class to read and write on the RMD-X8 motor.
 

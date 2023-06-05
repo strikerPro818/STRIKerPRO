@@ -6,6 +6,7 @@ from turbojpeg import TurboJPEG, TJPF_BGR, TJFLAG_FASTDCT
 import requests
 from threading import Thread
 import numpy as np
+
 FRAME_W = 1920
 FRAME_H = 1080
 angleVector = 4.5
@@ -13,7 +14,7 @@ cam_pan = 90
 shooter_on, feeder_on, gyroTrack_on = False, False, False
 prev_z_angle = None
 
-model = YOLO('yolov8n-pose.mlmodel',task='pose')
+model = YOLO('yolov8n-pose.mlmodel', task='pose')
 results = model.track(source=0, show=False, stream=True, tracker="botsort.yaml")
 # results =[1,2,3,4]
 app = Flask(__name__)
@@ -37,7 +38,8 @@ def is_facing_camera(result, tolerance=0.8):
         right_ear_x, right_ear_y, right_ear_visibility = int(keypoints[4][0]), int(keypoints[4][1]), keypoints[4][2]
         nose_x, nose_y, nose_visibility = int(keypoints[0][0]), int(keypoints[0][1]), keypoints[0][2]
 
-        if all([left_eye_visibility > 0, right_eye_visibility > 0, left_ear_visibility > 0, right_ear_visibility > 0, nose_visibility > 0]):
+        if all([left_eye_visibility > 0, right_eye_visibility > 0, left_ear_visibility > 0, right_ear_visibility > 0,
+                nose_visibility > 0]):
             eye_distance = np.sqrt((left_eye_x - right_eye_x) ** 2 + (left_eye_y - right_eye_y) ** 2)
             left_ear_nose_distance = np.sqrt((left_ear_x - nose_x) ** 2 + (left_ear_y - nose_y) ** 2)
             right_ear_nose_distance = np.sqrt((right_ear_x - nose_x) ** 2 + (right_ear_y - nose_y) ** 2)
@@ -54,6 +56,7 @@ def is_facing_camera(result, tolerance=0.8):
     else:
         print('Not detect facing')
         return False
+
 
 def detect_ready_position(result):
     if result.keypoints is not None and len(result.keypoints) > 0:
@@ -89,6 +92,8 @@ def detect_ready_position(result):
             print('Player not ready')
             stopFeeder()
             # pca_output.channels[1].duty_cycle = int(0 / 100 * 0xFFFF)
+
+
 def panAngle(angle):
     def start_panAngle_thread():
         url = 'http://192.168.31.180:9090/tracking_data'
@@ -104,6 +109,33 @@ def panAngle(angle):
 
     t = Thread(target=start_panAngle_thread)
     t.start()
+
+
+@socketio.on('/angle_update')
+def panAnglePITCH(angle):
+    def start_panAngle_PITCH_thread():
+        url = 'http://192.168.31.180:9090/pitch/angle'
+        payload = {'angle': angle}
+        headers = {'Content-Type': 'application/json'}
+
+        response = requests.post(url, json=payload, headers=headers)
+
+        if response.status_code == 200:
+            print("Angle sent successfully")
+        else:
+            print("Error sending angle:", response.status_code)
+
+    t = Thread(target=start_panAngle_PITCH_thread)
+    t.start()
+
+
+@socketio.on('angle_update')
+def handle_angle_update(data):
+    # data is a dictionary containing the payload sent from the client
+    angle = data.get('angle', 0)
+    panAnglePITCH(angle)
+
+
 def startShooter(speed):
     def start_shooter_thread():
         url = 'http://192.168.31.180:9090/shooter/start'
@@ -118,6 +150,7 @@ def startShooter(speed):
     t = Thread(target=start_shooter_thread)
     t.start()
 
+
 def stopShooter():
     def stop_shooter_thread():
         url = 'http://192.168.31.180:9090/shooter/stop'
@@ -129,6 +162,7 @@ def stopShooter():
 
     t = Thread(target=stop_shooter_thread)
     t.start()
+
 
 def startFeeder(speed):
     def start_feeder_thread():
@@ -143,6 +177,7 @@ def startFeeder(speed):
 
     t = Thread(target=start_feeder_thread)
     t.start()
+
 
 def stopFeeder():
     def stop_feeder_thread():
@@ -160,7 +195,6 @@ def stopFeeder():
 def autoTrack(x1, x2):
     global cam_pan, FRAME_W, angleVector
 
-
     trackX = x1
     trackW = x2 - x1
     trackX = trackX + (trackW / 2)
@@ -175,30 +209,35 @@ def autoTrack(x1, x2):
     # panAngle((cam_pan - 90))
     # time.sleep(0.1)
     return cam_pan
+
+
 def autoTrack_thread(x1, x2):
     global cam_pan
 
     cam_pan = autoTrack(x1, x2)
+
+
 def gen_frames():
-    global results, model, tracker, reid_model, outputs, cam_pan, device, latest_result, latest_frame, frame_lock, frame_event
+    global results, model, tracker, reid_model, outputs, cam_pan, device, result, latest_frame, frame_lock, frame_event
     # with lock:
     for result in results:
         img = result.plot(conf=False,
-            line_width=None,
-            font_size=None,
-            font='Arial.ttf',
-            pil=False,
-            img=None,
-            img_gpu=True,
-            kpt_line=True,
-            labels=False,
-            boxes=False,
-            masks=False,
-            probs=False)
+                          line_width=None,
+                          font_size=None,
+                          font='Arial.ttf',
+                          pil=False,
+                          img=None,
+                          img_gpu=True,
+                          kpt_line=True,
+                          labels=False,
+                          boxes=False,
+                          masks=False,
+                          probs=False)
 
-        print(result.speed)
 
-        latest_result = result
+        # print(result.speed)
+
+        # latest_result = result
         # print(img)
         if result.boxes is not None:
 
@@ -216,7 +255,6 @@ def gen_frames():
                     # if (highlighted_id is not None and track_id == highlighted_id) or is_facing_camera(result):
                     if (highlighted_id is not None and track_id == highlighted_id):
 
-
                         color = (0, 0, 255)
                         text = f'Selected ID: {int(track_id)}'
                         auto_track_thread = Thread(target=autoTrack_thread, args=(x1, x2))
@@ -233,7 +271,6 @@ def gen_frames():
                         color = (0, 255, 0)
                         text = f'Track ID: {int(track_id)}'
 
-
                     cv2.rectangle(img, (int(x1), int(y1)), (int(x2), int(y2)), color, 2)
                     cv2.putText(img, text, (int(x1), int(y1) - 10),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
@@ -241,18 +278,28 @@ def gen_frames():
 
         encoded_image = turboJPG.encode(img, quality=80, pixel_format=TJPF_BGR, flags=TJFLAG_FASTDCT)
         yield (b'--frame\r\n'
-                 b'Content-Type: image/jpeg\r\n\r\n' + encoded_image + b'\r\n\r\n')
+               b'Content-Type: image/jpeg\r\n\r\n' + encoded_image + b'\r\n\r\n')
+
 
 @socketio.on('click_event')
 def handle_click_event(data):
-    global highlighted_id, latest_result
+    global highlighted_id, result
     x, y = data['x'], data['y']
 
     found_id = None
-    if latest_result is not None:
-        boxes = latest_result.boxes.xyxy.to("cpu").numpy()
-        classes = latest_result.boxes.cls.to("cpu").numpy()
-        ids = latest_result.boxes.id.numpy()
+    if result is not None:
+        boxes = result.boxes.xyxy.to("cpu").numpy()
+        classes = result.boxes.cls.to("cpu").numpy()
+
+        try:
+            ids = result.boxes.id.numpy()
+        except Exception as e:
+            print(f"Error: {e}")
+            print(f"result: {result}")
+            print(f"result.boxes: {result.boxes}")
+            print(f"result.boxes.id: {result.boxes.id}")
+            raise
+
         for box, cls, obj_id in zip(boxes, classes, ids):
             if cls == 0:  # "person" class index is 0
                 x1, y1, x2, y2 = map(int, box)
@@ -269,6 +316,8 @@ def handle_click_event(data):
 
     # Pass highlighted_id argument to gen_frames function
     socketio.emit('frame_update', {'data': 'update frame', 'highlighted_id': highlighted_id})
+
+
 # @app.route('/gyro_data', methods=['POST'])
 # def handle_gyro_data():
 #     global z_angle, gyroTrack_on
@@ -283,6 +332,8 @@ def handle_click_event(data):
 def process_gyro_data(gyro_data):
     global z_angle, gyroTrack_on
     z_angle = gyro_data.get('z')
+
+
 @app.route('/gyro_data', methods=['POST'])
 def handle_gyro_data():
     if request.method == 'POST':
@@ -294,6 +345,7 @@ def handle_gyro_data():
         global gyroTrack_on
         gyroTrack_on = False
         return '', 405
+
 
 @socketio.on('button_click')
 def handle_button_click(data):
@@ -346,6 +398,8 @@ def handle_button_click(data):
     elif data.get('direction') == 'gyroTrack':
         gyroTrack_on = not gyroTrack_on  # Toggle the gyroTrack_on value
         gyroTrack(z_rotation_angle, gyroTrack_on)
+
+
 def gyroTrack(z_rotation_angle, gyroTrack_on):
     global cam_pan, angleVector, prev_z_angle
 
@@ -356,14 +410,15 @@ def gyroTrack(z_rotation_angle, gyroTrack_on):
     elif gyroTrack_on and (prev_z_angle is None or abs(z_rotation_angle - prev_z_angle) > angle_threshold):
         panAngle(z_rotation_angle)
 
+
 @app.route('/video_feed')
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
-
 
 
 # if __name__ == '__main__':

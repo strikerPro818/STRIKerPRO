@@ -196,7 +196,7 @@
 <div id="dashboard-container">
 
     <div id="video-button-container">
-        <div id="video-heading">AI Tracking System</div>
+        <div id="video-heading">AI fv System</div>
         <div id="video-container">
 
 
@@ -218,6 +218,8 @@
         <div id="slider-container">
             <input type="range" min="0" max="100" value="50" class="slider" id="shooter-speed">
             <p id="speedStatus">Speed: 50</p>
+            <input type="range" min="0" max="53" value="30" class="slider" id="shooter-angle">
+            <p id="angleStatus">Angle: 30</p>
         </div>
 
 
@@ -312,6 +314,20 @@
             socket.emit('button_click', {direction: 'bottom'});
         });
 
+        const shooterAngle = document.getElementById('shooter-angle');
+        const angleStatus = document.getElementById('angleStatus');
+        let shooterAngleOn = true;
+
+        shooterAngle.addEventListener('input', () => {
+            console.log("Angle Adjusted!");
+            angleStatus.textContent = "Angle: " + shooterAngle.value + "°";
+
+            if (shooterAngleOn) {
+                console.log(shooterAngle.value + "Angle Updated!")
+                socket.emit('angle_update', {angle: shooterAngle.value});
+            }
+        });
+
 
         const shooterSpeed = document.getElementById('shooter-speed');
         const speedStatus = document.getElementById('speedStatus');
@@ -325,6 +341,7 @@
             }
         });
 
+
         shooterBtn.addEventListener('click', () => {
             console.log("Shooter button clicked");
             shooterBtn.classList.toggle('red'); // toggle red class
@@ -332,7 +349,10 @@
 
             if (shooterOn) {
                 socket.emit('speed_update', {speed: shooterSpeed.value});
+
+
             }
+
             socket.emit('button_click', {direction: 'shooter', speed: shooterOn ? shooterSpeed.value : 0});
         });
 
@@ -348,16 +368,6 @@
             const direction = 'gyroTrack';
             socket.emit('button_click', {direction: direction});
         });
-
-
-        // // Add event listener for canvas click/touch events
-        // function handleMouseEvent(event) {
-        //     const x = event.clientX || (event.touches && event.touches[0].clientX);
-        //     const y = event.clientY || (event.touches && event.touches[0].clientY);
-        //     if (x && y) {
-        //         socket.emit('click_event', {x: x, y: y});
-        //     }
-        // }
 
 
         socket.on('data_update', (data) => {

@@ -1,5 +1,6 @@
 # from src.rmd_x8 import RMD_X8
-from remote.STEP57 import STEP57
+from STEP57YAW import STEP57YAW
+from STEP57PITCH import STEP57PITCH
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO
 from adafruit_pca9685 import PCA9685
@@ -7,12 +8,20 @@ import busio
 from board import SCL, SDA
 
 # robot = RMD_X8(0x141)
-robot = STEP57(0x0100)
+yawMotor = STEP57YAW(0x0100)
 
-robot.setup()
-robot.step_write_pid(20000, 76000, 1)
-robot.step_on()
-gear_ratio = 10.5
+yawMotor.setup()
+yawMotor.step_write_pid(20000, 76000, 1)
+yawMotor.step_on()
+yaw_gear_ratio = 10.5
+
+pitchMotor = STEP57PITCH(0x0200)
+pitch_gear_ratio = 23
+pitchMotor.setup()
+pitchMotor.step_on()
+pitchMotor.step_write_pid(80000,476000,1)
+# pitchMotor.step_write_pid(20000, 76000, 1)
+
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -49,9 +58,25 @@ def handle_tracking_data():
 #     print("Executed Angle:", angle)
 #     robot.position_closed_loop_2(data)
 def panAngle(angle):
-    global gear_ratio
-    robot.step_position(angle * gear_ratio, 4000)
+    global yaw_gear_ratio
+    yawMotor.step_position(angle * yaw_gear_ratio, 4000)
 
+def panAnglePITCH(angle):
+    global pitch_gear_ratio
+    print('Pitch Current Angle:', angle)
+    pitchMotor.step_position(angle * pitch_gear_ratio, 4000)
+@app.route('/pitch/angle', methods=['POST'])
+def handle_pitch_angle():
+    # Retrieve the angle value from the request's JSON payload
+    payload = request.get_json()
+    angle = payload.get('angle', 30)
+    print('here!', int(angle))
+
+    # Call panAnglePITCH function with the retrieved angle
+    panAnglePITCH(int(angle))
+
+    # Return a success status
+    return jsonify({'status': 'success'}), 200
 @app.route('/shooter/start', methods=['POST'])
 def handle_shooter_start():
     # Retrieve the speed value from the request's JSON payload
@@ -109,5 +134,6 @@ def stopFeeder():
     pca_output.channels[1].duty_cycle = int(0 / 100 * 0xFFFF)
 
 if __name__ == '__main__':
+    # panAnglePITCH(0)
     socketio.run(app, host='192.168.31.180', port=9090, allow_unsafe_werkzeug=True)
 
