@@ -1,3 +1,5 @@
+import time
+
 from ultralytics import YOLO
 from flask import Flask, render_template, Response, request
 from flask_socketio import SocketIO
@@ -6,27 +8,34 @@ from turbojpeg import TurboJPEG, TJPF_BGR, TJFLAG_FASTDCT
 import requests
 from threading import Thread
 import numpy as np
+import paramiko
+
+from werkzeug.middleware.profiler import ProfilerMiddleware
+
+
 
 FRAME_W = 1920
 FRAME_H = 1080
 angleVector = 4.5
-cam_pan = 90
+# cam_pan = 90
+cam_pan = 0
+
 shooter_on, feeder_on, gyroTrack_on = False, False, False
 prev_z_angle = None
 
 model = YOLO('yolov8n-pose.mlmodel', task='pose')
-results = model.track(source=0, show=False, stream=True, tracker="botsort.yaml")
+results = model.track(source=0, show=False, stream=True, persist=True, tracker="botsort.yaml")
 # results =[1,2,3,4]
 app = Flask(__name__)
+# app.config['PROFILE'] = True
+# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
+
 
 highlighted_id = None
 turboJPG = TurboJPEG()
 socketio = SocketIO(app)
 
 
-# def panAngle(inputAngle):
-#     '''I wanna send the angle'''
-#     print(inputAngle, "panAngle")
 def is_facing_camera(result, tolerance=0.8):
     if result.keypoints is not None and len(result.keypoints) > 0:
         keypoints = result.keypoints[0][:17]  # Get keypoints for the first person detected
@@ -96,7 +105,7 @@ def detect_ready_position(result):
 
 def panAngle(angle):
     def start_panAngle_thread():
-        url = 'http://192.168.31.180:9090/tracking_data'
+        url = 'http://169.254.93.151:9090/tracking_data'
         payload = {'z': angle}
         headers = {'Content-Type': 'application/json'}
 
@@ -114,7 +123,7 @@ def panAngle(angle):
 @socketio.on('/angle_update')
 def panAnglePITCH(angle):
     def start_panAngle_PITCH_thread():
-        url = 'http://192.168.31.180:9090/pitch/angle'
+        url = 'http://169.254.93.151:9090/pitch/angle'
         payload = {'angle': angle}
         headers = {'Content-Type': 'application/json'}
 
@@ -138,7 +147,7 @@ def handle_angle_update(data):
 
 def startShooter(speed):
     def start_shooter_thread():
-        url = 'http://192.168.31.180:9090/shooter/start'
+        url = 'http://169.254.93.151:9090/shooter/start'
         payload = {'speed': speed}
         headers = {'Content-Type': 'application/json'}
         response = requests.post(url, json=payload, headers=headers)
@@ -150,10 +159,15 @@ def startShooter(speed):
     t = Thread(target=start_shooter_thread)
     t.start()
 
-
+@socketio.on('speed_update')
+def handle_speed_update(data):
+    # data is a dictionary containing the payload sent from the client
+    speed = data.get('speed', 0)
+    print('get',speed)
+    startShooter(int(speed))
 def stopShooter():
     def stop_shooter_thread():
-        url = 'http://192.168.31.180:9090/shooter/stop'
+        url = 'http://169.254.93.151:9090/shooter/stop'
         response = requests.post(url)
         if response.status_code == 200:
             print("Shooter stopped successfully")
@@ -166,7 +180,7 @@ def stopShooter():
 
 def startFeeder(speed):
     def start_feeder_thread():
-        url = 'http://192.168.31.180:9090/feeder/start'
+        url = 'http://169.254.93.151:9090/feeder/start'
         payload = {'speed': speed}
         headers = {'Content-Type': 'application/json'}
         response = requests.post(url, json=payload, headers=headers)
@@ -181,7 +195,7 @@ def startFeeder(speed):
 
 def stopFeeder():
     def stop_feeder_thread():
-        url = 'http://192.168.31.180:9090/feeder/stop'
+        url = 'http://169.254.93.151:9090/feeder/stop'
         response = requests.post(url)
         if response.status_code == 200:
             print("Feeder stopped successfully")
@@ -202,7 +216,9 @@ def autoTrack(x1, x2):
     turn_x /= float(FRAME_W / 2)
     turn_x *= angleVector  # VFOV
     print(turn_x)
-    cam_pan += -turn_x
+    # cam_pan += -turn_x
+    cam_pan -= -turn_x
+
     cam_pan = max(0, min(180, cam_pan))
     print('Move:', int(cam_pan), 'Auto Turn: ', (cam_pan - 90))
     panAngle((cam_pan - 90))
@@ -221,6 +237,8 @@ def gen_frames():
     global results, model, tracker, reid_model, outputs, cam_pan, device, result, latest_frame, frame_lock, frame_event
     # with lock:
     for result in results:
+
+
         img = result.plot(conf=False,
                           line_width=None,
                           font_size=None,
@@ -231,8 +249,12 @@ def gen_frames():
                           kpt_line=True,
                           labels=False,
                           boxes=False,
-                          masks=False,
+                          masks=True,
                           probs=False)
+        # img = cv2.rotate(img, 1)
+
+        # img = cv2.flip(img, -1)
+
 
 
         # print(result.speed)
@@ -250,6 +272,8 @@ def gen_frames():
                 ids = result.boxes.id.numpy()
                 for box, obj_id in zip(boxes, ids):
                     x1, y1, x2, y2 = map(int, box)
+                    # y1 = FRAME_H - y1  # Calculate y1 as 1080 - y1
+                    # y2 = FRAME_H - y2  # Calculate y2 as 1080 - y2
                     track_id = int(obj_id.item())
 
                     # if (highlighted_id is not None and track_id == highlighted_id) or is_facing_camera(result):
@@ -262,7 +286,7 @@ def gen_frames():
                         # detect_ready_position(result)
                         # cam_pan = autoTrack(x1, x2)
                         # detect_arm_raise(result)
-                        # detect_ready_position(result)
+                        detect_ready_position(result)
 
 
 
@@ -272,7 +296,10 @@ def gen_frames():
                         text = f'Track ID: {int(track_id)}'
 
                     cv2.rectangle(img, (int(x1), int(y1)), (int(x2), int(y2)), color, 2)
-                    cv2.putText(img, text, (int(x1), int(y1) - 10),
+                    # cv2.putText(img, text, (int(x1), int(y1) - 10),
+                    #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+
+                    cv2.putText(img, text, (int(x1), (int(y1) - 10)),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
                     # send_data_update(center_x, center_y, x1, y1, x2, y2,cam_pan - 90)
 
@@ -371,7 +398,7 @@ def handle_button_click(data):
             stopShooter()
             shooter_on = False
         else:
-            print(speed)
+            print('speed', 50)
             startShooter(int(speed))
 
             shooter_on = True
@@ -420,8 +447,40 @@ def video_feed():
 def index():
     return render_template('index.html')
 
+def remoteExecute():
+    def remoteExecute_thread():
+        hostname = 'raspberrypi.local'
+        port = 22  # Default SSH port is 22
+        username = 'pi'
+        password = 'Keven818'
+
+        # Create an SSH client instance
+        ssh_client = paramiko.SSHClient()
+
+        # Automatically add the remote server's host key (this is insecure, use with caution)
+        ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+        # Connect to the remote server
+        ssh_client.connect(hostname, port, username, password)
+        # command = 'python3 /Downloads/remote/remoteExecution.py'
+        command = 'python3 ~/Downloads/remote/remoteExecution.py'
+
+        stdin, stdout, stderr = ssh_client.exec_command(command)
+        print(stderr.read().decode())
+
+        # Close the SSH connection
+        ssh_client.close()
+
+    t = Thread(target=remoteExecute_thread)
+    t.start()
+
 
 # if __name__ == '__main__':
 #     app.run(host='0.0.0.0', port='9090', debug=False)
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=9090, allow_unsafe_werkzeug=True)
+    remoteExecute()
+    # time.sleep(10)
+
+    # socketio.run(app, host='0.0.0.0', port=9090, allow_unsafe_werkzeug=True)
+
+    socketio.run(app, host='192.168.31.218', port=9090, allow_unsafe_werkzeug=True)

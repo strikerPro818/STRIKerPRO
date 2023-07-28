@@ -4,6 +4,9 @@ from ultralytics import YOLO
 import time
 app = Flask(__name__)
 
+
+
+
 # model = YOLO("/home/striker/Downloads/yolov8n-pose.engine", task='pose')
 # model = YOLO("/home/striker/.local/lib/python3.8/site-packages/yolov5/yolov8n.engine")
 # model = YOLO('/home/striker/Downloads/JetsonBackup/yolov8n-pose.engine', task='pose')  # load an official model
@@ -17,7 +20,7 @@ app = Flask(__name__)
 model = YOLO('./local/yolov8n-pose.mlmodel',task='pose')
 
 
-results = model.track(source=0, show=False, stream=True, tracker="botsort.yaml")
+results = model.track(source=1, show=False, stream=True, tracker="botsort.yaml")
 
 # results = model.predict(source=0, show=False, stream=True)
 

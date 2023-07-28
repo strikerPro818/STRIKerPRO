@@ -137,16 +137,15 @@ class STEP57YAW:
         self.bus.send(message)
         print(message)
 
-        # received_message = self.bus.recv(timeout=0.01)
-        # if received_message is None:
-        #     print("No message received within the specified timeout.")
-        # else:
-        #     # print()
-        #     print(received_message)
-        #     # print()
-        #
-        # return received_message
+        received_message = self.bus.recv(timeout=0.01)
+        if received_message is None:
+            print("No message received within the specified timeout.")
+        else:
+            # print()
+            print(received_message)
+            # print()
 
+        return received_message
 
     def read_step_pid(self):
         """
@@ -441,7 +440,7 @@ class STEP57YAW:
 
         self.send_cmd(message1)
         # print('here')
-        self.send_cmd(message2,  identifier=0x0101)
+        self.send_cmd(message2, identifier=0x0101)
 
     def step_position_simple(self, position):
         """
@@ -480,9 +479,9 @@ class STEP57YAW:
         print(hex_message1)
         print(hex_message2)
 
-        self.send_cmd(message1, 0.01)
+        self.send_cmd(message1)
         # print('here')
-        self.send_cmd(message2, 0.01,identifier=0x0101)
+        self.send_cmd(message2,identifier=0x0101)
     def step_position_acdc(self, position, speed):
         """
         Sends a command to control the motor in direct position limit mode.
@@ -543,7 +542,7 @@ class STEP57YAW:
     #     self.send_cmd(message2, 0.01,identifier=0x0101)
     def step_write_pid(self, position_P,speed_P,speed_I):
 
-        save_config = 0x00
+        save_config = 0x01
         trapezoidal_mode_kp = 366640
         direct_mode_kp = position_P
         speed_loop_kp = speed_P
@@ -603,6 +602,18 @@ class STEP57YAW:
                    ,0x6B]
         return self.send_cmd(message, 0.01)
 
+
+    def initiate_senseless_zero(self):
+        message = [0x9A, 0x02, 0x00, 0x6B]
+        return self.send_cmd(message, 0.01, identifier=0x0100)
+
+    def read_initiation_parameters(self):
+        message = [0x22, 0x6B]
+        return self.send_cmd(message, 0.01,identifier=0x0100)
+
+    def stop_senseless_zero(self):
+        message = [0x9C, 0x45, 0x6B]
+        return self.send_cmd(message, 0.01, identifier=0x0100)
 
 
 

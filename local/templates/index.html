@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">-->
+    <meta name="viewport" content="initial-scale=1.6; maximum-scale=1.0; width=device-width; "/>
+
     <title>Rocket Launch and Flight Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -30,18 +34,19 @@
 
 
         #video-container {
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+    position: relative;
+    border: 2px solid #00ff00;
+    border-radius: 5px;
+    z-index: 1;
+    max-width: 100vw;
+    padding: 0;
+    display: flex; /* Add this */
+    justify-content: center; /* Add this */
+    align-items: center; /* Add this */
+}
 
-
-            grid-column: 1 / -1;
-            grid-row: 1 / 2;
-            position: relative;
-            border: 2px solid #00ff00;
-            border-radius: 5px;
-            /* overflow: hidden; Remove this line */
-            z-index: 1;
-            max-width: 100vw;
-            padding: 0;
-        }
 
 
         #video {
@@ -91,10 +96,22 @@
         }
 
         #button-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+
         }
+
+        #slider-container {
+    position: absolute;
+    top: 50px;  /* Adjust the value here as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: auto;
+}
+
 
         #shooter-btn, #feed-btn {
             margin: 10px;
@@ -125,19 +142,19 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh; /* Full height of the viewport */
+            height: 200vh; /* Full height of the viewport */
         }
 
-        .slider {
-            width: 400px; /* Fixed width */
-            height: 25px; /* Adjust this value to change the slider's thickness. */
-            margin-left: auto;
-            margin-right: auto;
-            padding: 10px 0; /* This increases the touchable area without visibly changing the slider's size. */
-            background: rgba(221, 221, 221, 0);
-            outline: none;
-            -webkit-appearance: none;
-        }
+
+        /*.slider {*/
+        /*    margin-left: auto;*/
+        /*    margin-right: auto;*/
+        /*    !*padding: 10px 0; !* This increases the touchable area without visibly changing the slider's size. *!*!*/
+        /*    background: rgba(221, 221, 221, 0);*/
+        /*    transform: rotate(270deg); !* Rotate the slider *!*/
+        /*    -webkit-appearance: none;*/
+        /*}*/
+
 
         .slider::-webkit-slider-thumb {
             width: 25px; /* Adjust this value to change the slider thumb's size. */
@@ -155,6 +172,30 @@
             cursor: pointer;
         }
 
+        .slider {
+            -webkit-appearance: none;
+        }
+
+        #slider-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .slider-container-bottom-left {
+            order: 1;
+            align-self: flex-end;
+        }
+
+        .slider-container-bottom-right {
+            order: 2;
+            align-self: flex-end;
+        }
+
+        #button-container {
+            margin-top: 10px;
+        }
+
 
         @media (max-width: 480px) {
             #data-container {
@@ -166,6 +207,14 @@
                 font-size: 16px;
             }
 
+            @media (max-width: 768px) {
+                #left-slider-container, #right-slider-container {
+                    top: 20%;
+                    transform: translateY(-20%);
+                }
+            }
+
+
             .data-box h3 {
                 font-size: 16px;
                 margin-bottom: 4px;
@@ -175,9 +224,6 @@
                 font-size: 20px;
             }
 
-            #video-container {
-                padding: 16px;
-            }
 
             #video-heading {
                 font-size: 24px;
@@ -194,39 +240,38 @@
 <body>
 
 <div id="dashboard-container">
-
     <div id="video-button-container">
-        <div id="video-heading">AI fv System</div>
         <div id="video-container">
-
-
             <img id="video" src="{{ url_for('video_feed') }}" alt="Video feed">
+            <!-- Moved here -->
+            <!-- <div id="video-heading">AI Tracking System</div> -->
+
+            <div id="button-container">
+                <button id="left-btn" class="control-btn">←</button>
+                <button id="bottom-btn" class="control-btn">▼</button>
+                <button id="right-btn" class="control-btn">→</button>
+                <div class="Fire-buttons">
+                    <button id="shooter-btn" class="control-btn">Shoot</button>
+                    <button id="feed-btn" class="control-btn">Feed</button>
+                    <button id="gyro-btn" class="control-btn">GT</button>
+                </div>
+            </div>
+            <div id="slider-container">
+                <div id="left-slider-container" class="slider-container-bottom-left">
+                    <input type="range" min="0" max="100" value="50" class="slider" id="shooter-speed"
+                           orient="vertical">
+                    <p id="speedStatus">Speed: 50</p>
+                </div>
+                <div id="right-slider-container" class="slider-container-bottom-right">
+                    <input type="range" min="0" max="45" value="0" class="slider" id="shooter-angle"
+                           orient="vertical">
+                    <p id="angleStatus">Angle: 0</p>
+                </div>
+            </div>
         </div>
-
-        <div id="button-container">
-            <button id="left-btn" class="control-btn">←</button>
-            <button id="bottom-btn" class="control-btn">▼</button>
-            <button id="right-btn" class="control-btn">→</button>
-        </div>
-
-        <div class="Fire-buttons">
-            <button id="shooter-btn" class="control-btn">S</button>
-            <button id="feed-btn" class="control-btn">F</button>
-            <button id="gyro-btn" class="control-btn">GyroTrack</button>
-        </div>
-
-        <div id="slider-container">
-            <input type="range" min="0" max="100" value="50" class="slider" id="shooter-speed">
-            <p id="speedStatus">Speed: 50</p>
-            <input type="range" min="0" max="53" value="30" class="slider" id="shooter-angle">
-            <p id="angleStatus">Angle: 30</p>
-        </div>
-
-
     </div>
-
-
 </div>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
 
@@ -323,7 +368,7 @@
             angleStatus.textContent = "Angle: " + shooterAngle.value + "°";
 
             if (shooterAngleOn) {
-                console.log(shooterAngle.value + "Angle Updated!")
+                console.log(shooterAngle.value + " Angle Updated!")
                 socket.emit('angle_update', {angle: shooterAngle.value});
             }
         });
@@ -331,16 +376,8 @@
 
         const shooterSpeed = document.getElementById('shooter-speed');
         const speedStatus = document.getElementById('speedStatus');
+// const shooterBtn = document.getElementById('shooter-btn');
         let shooterOn = false;
-
-        shooterSpeed.addEventListener('input', () => {
-            speedStatus.textContent = "Speed: " + shooterSpeed.value;
-
-            if (shooterOn) {
-                socket.emit('speed_update', {speed: shooterSpeed.value});
-            }
-        });
-
 
         shooterBtn.addEventListener('click', () => {
             console.log("Shooter button clicked");
@@ -348,13 +385,18 @@
             shooterOn = shooterBtn.classList.contains('red');
 
             if (shooterOn) {
-                socket.emit('speed_update', {speed: shooterSpeed.value});
-
-
+                shooterSpeed.addEventListener('input', updateShooterSpeed);
+            } else {
+                shooterSpeed.removeEventListener('input', updateShooterSpeed);
             }
 
             socket.emit('button_click', {direction: 'shooter', speed: shooterOn ? shooterSpeed.value : 0});
         });
+
+        function updateShooterSpeed() {
+            speedStatus.textContent = "Speed: " + shooterSpeed.value;
+            socket.emit('speed_update', {speed: shooterSpeed.value});
+        }
 
 
         feedBtn.addEventListener('click', () => {

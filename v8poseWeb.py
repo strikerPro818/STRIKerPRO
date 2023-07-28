@@ -11,11 +11,13 @@ socketio = SocketIO(app)
 # model = YOLO("/home/striker/Downloads/yolov8n-pose.engine", task='pose')
 # model = YOLO('/home/striker/Downloads/JetsonBackup/yolov8n-pose.engine', task='pose')  # load an official model
 # model = YOLO('/home/striker/yolov8n-pose.engine', task='pose')  # INT8
-model = YOLO('/home/striker/Downloads/models/yolov8n-pose.engine', task='pose')  # INT8
+# model = YOLO('/home/striker/Downloads/models/yolov8n-pose.engine', task='pose')  # INT8
+model = YOLO('/Users/strikervision/PycharmProjects/STRIKerPRO/local/yolov8n-pose.mlmodel', task='pose')
 
 
 
-results = model.track(source=0, show=False, stream=True, tracker="botsort.yaml",device=0)
+
+results = model.track(source=0, show=False, stream=True, tracker="botsort.yaml")
 
 jpeg = TurboJPEG()
 

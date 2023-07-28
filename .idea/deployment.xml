@@ -1,11 +1,172 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="striker@192.168.31.180:22 password" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="pi@169.254.93.151:22 password (5)" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
+      <paths name="pi@169.254.93.151:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_678" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@169.254.93.151:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_800" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@169.254.93.151:22 password (3)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_962" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@169.254.93.151:22 password (4)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/pi/Downloads" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@169.254.93.151:22 password (5)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/pi/Downloads" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@172.20.10.2:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_515" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@172.20.10.2:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_466" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@172.20.10.2:22 password (3)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_734" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@172.20.10.2:22 password (4)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_231" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@172.20.10.2:22 password (5)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_588" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@192.168.31.189:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_18" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@192.168.31.189:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_991" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@192.168.31.189:22 password (3)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_100" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@192.168.31.189:22 password (4)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/pi/Downloads" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@192.168.31.189:22 password (5)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_997" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@192.168.31.189:22 password (6)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_193" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@192.168.31.189:22 password (7)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_510" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@192.168.31.189:22 password (8)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_302" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="striker@192.168.31.180:22 password">
         <serverdata>
           <mappings>
             <mapping deploy="/home/striker/Downloads/Jetson" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.180:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_303" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.234:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_516" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.234:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_896" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.239:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_878" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="striker@192.168.31.239:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/striker/Downloads" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>

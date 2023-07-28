@@ -17,14 +17,19 @@ pca_output.frequency = 100
 # speed = 0
 # pca_output.channels[channel].duty_cycle = int(speed / 100 * 0xFFFF)
 
-# pca_output.channels[0].duty_cycle = int(0 / 100 * 0xFFFF)
-# pca_output.channels[1].duty_cycle = int(100 / 100 * 0xFFFF)
+# pca_output.channels[0].duty_cycle = int(0 / 2 /  100 * 0xFFFF)
+# pca_output.channels[1].duty_cycle = int(0 / 100 * 0xFFFF)
 #
 # time.sleep(4)
 
-pca_output.channels[0].duty_cycle = int(0 / 2 / 100 * 0xFFFF)
-pca_output.channels[1].duty_cycle = int(0 / 100 * 0xFFFF)
-# pca_output.channels[8].duty_cycle = int(0 / 100 * 0xFFFF)
+# pca_output.channels[0].duty_cycle = int(0 / 2 / 100 * 0xFFFF)
+# pca_output.channels[1].duty_cycle = int(0 / 100 * 0xFFFF)
+pca_output.channels[4].duty_cycle = int(0 / 100 * 0xFFFF)
+pca_output.channels[5].duty_cycle = int(0 / 100 * 0xFFFF)
+
+pca_output.channels[6].duty_cycle = int(0 / 100 * 0xFFFF)
+pca_output.channels[7].duty_cycle = int(0 / 100 * 0xFFFF)
+
 # pca_output.channels[9].duty_cycle = int(100 / 100 * 0xFFFF)
 # time.sleep(1)
 # pca_output.channels[3].duty_cycle = int(20 / 100 * 0xFFFF)

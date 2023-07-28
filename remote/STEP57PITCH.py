@@ -604,6 +604,14 @@ class STEP57PITCH:
         return self.send_cmd(message, 0.01)
 
 
+    def initiate_senseless_zero(self):
+        message = [0x9A, 0x02, 0x00, 0x6B]
+        return self.send_cmd(message, 0.01)
+    def read_initiation_parameters(self):
+        message = [0x22, 0x6B]
+        return self.send_cmd(message, 0.01,identifier=0x0200)
+
+
 
 
     def motor_stop(self):
